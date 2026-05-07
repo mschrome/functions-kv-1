@@ -1,0 +1,10 @@
+{
+  "schedules": [
+    {
+      "name": "heartbeat",
+      "cron": "*/5 * * * *",
+      "path": "/visit",
+      "method": "GET"
+    }
+  ]
+}
