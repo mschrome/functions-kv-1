@@ -4,9 +4,9 @@ import { getStore } from "@edgeone/pages-blob";
  * GET /blob-get-with-headers?key=xxx&consistency=eventual|strong
  * 返回对象内容 + 完整响应头
  */
-export async function onRequest({ request }) {
+export async function onRequestGet(context) {
   try {
-    const url = new URL(request.url);
+    const url = new URL(context.request.url);
     const key = url.searchParams.get("key");
     const consistency = url.searchParams.get("consistency") || "eventual";
 

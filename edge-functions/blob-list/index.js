@@ -4,9 +4,9 @@ import { getStore } from "@edgeone/pages-blob";
  * GET /blob-list?prefix=xxx&directories=true&consistency=eventual|strong
  * 列举对象，支持目录分组和前缀过滤
  */
-export async function onRequest({ request }) {
+export async function onRequestGet(context) {
   try {
-    const url = new URL(request.url);
+    const url = new URL(context.request.url);
     const prefix = url.searchParams.get("prefix") || undefined;
     const directories = url.searchParams.get("directories") === "true";
     const consistency = url.searchParams.get("consistency") || "eventual";

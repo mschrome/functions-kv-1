@@ -4,9 +4,9 @@ import { getStore } from "@edgeone/pages-blob";
  * POST /blob-delete
  * Body JSON: { key: string }
  */
-export async function onRequest({ request }) {
+export async function onRequestPost(context) {
   try {
-    const { key } = await request.json();
+    const { key } = await context.request.json();
 
     if (!key) {
       return Response.json({ error: "key is required" }, { status: 400 });

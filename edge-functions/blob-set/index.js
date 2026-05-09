@@ -5,8 +5,9 @@ import { getStore } from "@edgeone/pages-blob";
  * Body: FormData { key: string, value: File | string, onlyIfNew?: "true" }
  * 或 JSON { key: string, value: string, onlyIfNew?: boolean, json?: boolean }
  */
-export async function onRequest({ request }) {
+export async function onRequestPost(context) {
   try {
+    const request = context.request;
     const contentType = request.headers.get("content-type") || "";
     const store = getStore("test-store");
 

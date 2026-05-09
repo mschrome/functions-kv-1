@@ -4,7 +4,7 @@ import { listStores } from "@edgeone/pages-blob";
  * GET /blob-list-stores
  * 列举当前项目下所有命名空间
  */
-export async function onRequest({ request }) {
+export async function onRequestGet(context) {
   try {
     const { stores } = await listStores();
 

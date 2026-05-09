@@ -3,9 +3,9 @@ import { getStore } from "@edgeone/pages-blob";
 /**
  * GET /blob-get?key=xxx&type=text|json|arrayBuffer&consistency=eventual|strong
  */
-export async function onRequest({ request }) {
+export async function onRequestGet(context) {
   try {
-    const url = new URL(request.url);
+    const url = new URL(context.request.url);
     const key = url.searchParams.get("key");
     const type = url.searchParams.get("type") || "text";
     const consistency = url.searchParams.get("consistency") || "eventual";
