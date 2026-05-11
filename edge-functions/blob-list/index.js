@@ -1,7 +1,5 @@
 import { getStore } from "@edgeone/pages-blob";
 
-const store = getStore("functions-test");
-
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -18,6 +16,7 @@ export async function onRequestGet(context) {
     const directories = url.searchParams.get("directories") === "true";
     const consistency = url.searchParams.get("consistency") || "eventual";
 
+    const store = getStore("functions-test");
     const result = await store.list({ prefix, directories, consistency });
 
     return json({

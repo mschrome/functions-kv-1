@@ -1,7 +1,5 @@
 import { getStore } from "@edgeone/pages-blob";
 
-const store = getStore("functions-test");
-
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -21,6 +19,7 @@ export async function onRequestGet(context) {
       return json({ error: "key is required" }, 400);
     }
 
+    const store = getStore("functions-test");
     const result = await store.getWithHeaders(key, { consistency });
 
     if (result === null) {

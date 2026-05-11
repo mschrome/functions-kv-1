@@ -1,7 +1,5 @@
 import { getStore } from "@edgeone/pages-blob";
 
-const store = getStore("functions-test");
-
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -20,6 +18,7 @@ export async function onRequestPost(context) {
       return json({ error: "key is required" }, 400);
     }
 
+    const store = getStore("functions-test");
     await store.delete(key);
 
     return json({ success: true, deleted: key });
