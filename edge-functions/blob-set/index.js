@@ -1,7 +1,5 @@
 import { getStore } from "@edgeone/pages-blob";
 
-const store = getStore("functions-test");
-
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -17,6 +15,7 @@ export async function onRequestPost(context) {
   try {
     const request = context.request;
     const contentType = request.headers.get("content-type") || "";
+    const store = getStore("functions-test");
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
