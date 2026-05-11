@@ -1,5 +1,13 @@
 import { getStore } from "@edgeone/pages-blob";
 
+const store = getStore("functions-test");
+
+const json = (data, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
 /**
  * POST /blob-delete
  * Body JSON: { key: string }
@@ -9,14 +17,13 @@ export async function onRequestPost(context) {
     const { key } = await context.request.json();
 
     if (!key) {
-      return Response.json({ error: "key is required" }, { status: 400 });
+      return json({ error: "key is required" }, 400);
     }
 
-    const store = getStore("functions-test");
     await store.delete(key);
 
-    return Response.json({ success: true, deleted: key });
+    return json({ success: true, deleted: key });
   } catch (err) {
-    return Response.json({ error: err.message || String(err) }, { status: 500 });
+    return json({ error: err.message || String(err) }, 500);
   }
 }

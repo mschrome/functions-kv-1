@@ -1,5 +1,13 @@
 import { getStore } from "@edgeone/pages-blob";
 
+const store = getStore("functions-test");
+
+const json = (data, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
 /**
  * GET /blob-get?key=xxx&type=text|json|arrayBuffer&consistency=eventual|strong
  */
@@ -11,31 +19,23 @@ export async function onRequestGet(context) {
     const consistency = url.searchParams.get("consistency") || "eventual";
 
     if (!key) {
-      return Response.json({ error: "key is required" }, { status: 400 });
+      return json({ error: "key is required" }, 400);
     }
 
-    const store = getStore("functions-test");
     const value = await store.get(key, { type, consistency });
 
     if (value === null) {
-      return Response.json({ error: "not found", key }, { status: 404 });
+      return json({ error: "not found", key }, 404);
     }
 
-    // 如果是 arrayBuffer，返回二进制
     if (type === "arrayBuffer") {
       return new Response(value, {
         headers: { "content-type": "application/octet-stream" },
       });
     }
 
-    // 如果是 json，直接返回
-    if (type === "json") {
-      return Response.json({ key, value });
-    }
-
-    // 默认 text
-    return Response.json({ key, value });
+    return json({ key, value });
   } catch (err) {
-    return Response.json({ error: err.message || String(err) }, { status: 500 });
+    return json({ error: err.message || String(err) }, 500);
   }
 }

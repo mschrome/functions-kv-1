@@ -1,5 +1,13 @@
 import { getStore } from "@edgeone/pages-blob";
 
+const store = getStore("functions-test");
+
+const json = (data, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
 /**
  * POST /blob-set
  * Body: FormData { key: string, value: File | string, onlyIfNew?: "true" }
@@ -9,44 +17,37 @@ export async function onRequestPost(context) {
   try {
     const request = context.request;
     const contentType = request.headers.get("content-type") || "";
-    const store = getStore("functions-test");
 
     if (contentType.includes("multipart/form-data")) {
-      // 文件上传模式
       const formData = await request.formData();
       const key = formData.get("key");
       const file = formData.get("value");
       const onlyIfNew = formData.get("onlyIfNew") === "true";
 
       if (!key || !file) {
-        return Response.json({ error: "key and value are required" }, { status: 400 });
+        return json({ error: "key and value are required" }, 400);
       }
 
       await store.set(key, file, { onlyIfNew });
 
-      return Response.json({
-        success: true,
-        key,
-        size: file.size || null,
-      });
+      return json({ success: true, key, size: file.size || null });
     } else {
-      // JSON 模式
       const body = await request.json();
-      const { key, value, onlyIfNew, json } = body;
+      const { key, value, onlyIfNew, json: isJson } = body;
 
       if (!key || value === undefined) {
-        return Response.json({ error: "key and value are required" }, { status: 400 });
+        return json({ error: "key and value are required" }, 400);
       }
 
-      if (json) {
+      if (isJson) {
         await store.setJSON(key, value, { onlyIfNew });
       } else {
         await store.set(key, String(value), { onlyIfNew });
       }
 
-      return Response.json({ success: true, key });
+      return json({ success: true, key });
     }
   } catch (err) {
-    return Response.json({ error: err.message || String(err) }, { status: 500 });
+    return json({ error: err.message || String(err) }, 500);
   }
 }

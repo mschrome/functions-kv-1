@@ -1,18 +1,20 @@
 import { listStores } from "@edgeone/pages-blob";
 
+const json = (data, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
 /**
  * GET /blob-list-stores
- * 列举当前项目下所有命名空间
  */
 export async function onRequestGet(context) {
   try {
     const { stores } = await listStores();
 
-    return Response.json({
-      stores,
-      count: stores.length,
-    });
+    return json({ stores, count: stores.length });
   } catch (err) {
-    return Response.json({ error: err.message || String(err) }, { status: 500 });
+    return json({ error: err.message || String(err) }, 500);
   }
 }
