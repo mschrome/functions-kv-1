@@ -12,7 +12,7 @@ export async function onRequestPost(context) {
       return Response.json({ error: "key is required" }, { status: 400 });
     }
 
-    const store = getStore("test-store");
+    const store = getStore("functions-test");
     await store.delete(key);
 
     return Response.json({ success: true, deleted: key });

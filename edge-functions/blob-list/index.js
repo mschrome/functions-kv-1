@@ -11,7 +11,7 @@ export async function onRequestGet(context) {
     const directories = url.searchParams.get("directories") === "true";
     const consistency = url.searchParams.get("consistency") || "eventual";
 
-    const store = getStore("test-store");
+    const store = getStore("functions-test");
     const result = await store.list({ prefix, directories, consistency });
 
     return Response.json({

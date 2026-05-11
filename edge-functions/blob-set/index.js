@@ -9,7 +9,7 @@ export async function onRequestPost(context) {
   try {
     const request = context.request;
     const contentType = request.headers.get("content-type") || "";
-    const store = getStore("test-store");
+    const store = getStore("functions-test");
 
     if (contentType.includes("multipart/form-data")) {
       // 文件上传模式

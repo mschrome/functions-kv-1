@@ -14,7 +14,7 @@ export async function onRequestGet(context) {
       return Response.json({ error: "key is required" }, { status: 400 });
     }
 
-    const store = getStore("test-store");
+    const store = getStore("functions-test");
     const result = await store.getWithHeaders(key, { consistency });
 
     if (result === null) {
